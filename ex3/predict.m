@@ -7,9 +7,8 @@ function p = predict(Theta1, Theta2, X)
 m = size(X, 1);
 num_labels = size(Theta2, 1);
 
-% You need to return the following variables correctly 
-p = zeros(size(X, 1), 1);
-
+X = [ones(m, 1) X];
+[value,p] = max([ones(size(X),1) sigmoid(X*Theta1')]*Theta2',[],2);
 % ====================== YOUR CODE HERE ======================
 % Instructions: Complete the following code to make predictions using
 %               your learned neural network. You should set p to a 
