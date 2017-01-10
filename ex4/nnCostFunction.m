@@ -23,10 +23,17 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
                  num_labels, (hidden_layer_size + 1));
 
 % Setup some useful variables
+eye_y = eye(num_labels);
 m = size(X, 1);
-         
+a1 = sigmoid([ones(m,1) X ]*Theta1');
+a2 = sigmoid([ones(m,1) a1]*Theta2');
+
 % You need to return the following variables correctly 
-J = 0;
+
+J = -1/m*sum(sum(eye_y(y,:).*log(a2)+(1-eye_y(y,:)).*log(1-a2)));
+
+J = J + lambda/2/m*(sum(sum(Theta1(:,2:end).^2))+sum(sum(Theta2(:,2:end).^2)));
+
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
