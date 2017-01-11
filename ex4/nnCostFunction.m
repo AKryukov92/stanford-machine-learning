@@ -46,6 +46,10 @@ end
 Theta1_grad = 1/m*accD1;
 Theta2_grad = 1/m*accD2;
 
+%regularization
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end) + lambda/m*Theta1(:,2:end);
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end) + lambda/m*Theta2(:,2:end);
+
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
 %               following parts.
