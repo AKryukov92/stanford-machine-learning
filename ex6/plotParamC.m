@@ -1,4 +1,4 @@
-function sigma = plotSigma(X,y)
+function sigma = plotParamC(X,y)
   disp(size(X))
   disp(size(y))
   
@@ -14,27 +14,25 @@ function sigma = plotSigma(X,y)
   y_val   = y(train_end:val_end,1:size(y,2));
   y_test  = y(val_end:test_end, 1:size(y,2));
   
-  C = 3;
+  C_values = [0.01; 0.03; 0.1; 0.2; 0.3; 0.4; 0.5; 1; 3; 4; 5; 6];
+  sigma = 3;
   
-  sigmas = [0.01; 0.03; 0.1; 0.2; 0.3; 0.4; 0.5; 1; 3; 4; 5; 6];
+  error_train = zeros(length(C_values), 1);
+  error_val = zeros(length(C_values), 1);
   
-  error_train = zeros(length(sigmas), 1);
-  error_val = zeros(length(sigmas), 1);
-  
-  for i=1:length(sigmas)
-    model = svmTrain(X_train, y_train, C, @(x1, x2) gaussianKernel(x1, x2, sigmas(i)));
+  for i=1:length(C_values)
+    model = svmTrain(X_train, y_train, C_values(i), @(x1, x2) gaussianKernel(x1, x2, sigma));
     insights = svmPredict(model, X_train);
     predictions = svmPredict(model, X_val);
     error_train(i) = mean(double(insights ~= y_train));
     error_val(i) = mean(double(predictions ~= y_val));
   end
   
-  
   disp(error_train)
   disp("----------")
   disp(error_val)
   newplot()
-  plot(sigmas, error_train, sigmas, error_val);
+  plot(C_values, error_train, C_values, error_val);
   title('Learning curve for svm')
   legend('Train', 'Cross Validation')
   xlabel('Value of sigma')
